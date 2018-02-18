@@ -1,0 +1,7 @@
+db.sqlite3
+*.pyc
+/*.sublime-*
+/project/db.sqlite3
+/htmlcov/*
+.coverage
+.env

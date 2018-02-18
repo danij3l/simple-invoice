@@ -1,0 +1,7 @@
+coverage==4.1
+Django==1.9
+django-countries==3.4.1
+django-internationalflavor==0.2.1
+freezegun==0.3.7
+mock==2.0.0
+requests==2.10.0
