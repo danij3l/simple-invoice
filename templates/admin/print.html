@@ -1,0 +1,429 @@
+{% load staticfiles %}
+
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="GoodCode invoice">
+    <title>GoodCode invoice</title>
+    <style type="text/css" media="all">
+        /* RESET */
+        html, body, div, span, applet, object, iframe,
+        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        a, abbr, acronym, address, big, cite, code,
+        del, dfn, em, img, ins, kbd, q, s, samp,
+        small, strike, strong, sub, sup, tt, var,
+        b, u, i, center,
+        dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, embed,
+        figure, figcaption, footer, header, hgroup,
+        menu, nav, output, ruby, section, summary,
+        time, mark, audio, video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+        /* HTML5 display-role reset for older browsers */
+        article, aside, details, figcaption, figure,
+        footer, header, hgroup, menu, nav, section {
+            display: block;
+        }
+        body {
+            line-height: 1;
+        }
+        ol, ul, li {
+            list-style: none;
+        }
+        blockquote, q {
+            quotes: none;
+        }
+        blockquote:before, blockquote:after,
+        q:before, q:after {
+            content: '';
+            content: none;
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+        a img {
+            border:none;
+        }
+        :focus {
+            outline:0;
+        }
+        /* PAGE SETUP */
+        html {
+            font-size: 10px;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            color: #222;
+            line-height: 1.5;
+            background-color: #fff;
+            -webkit-font-smoothing: antialiased;
+            -webkit-text-size-adjust: none;
+        }
+        *, *:before, *:after {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        /* ADAPTIVE IMAGE */
+        .adaptive-image {
+            max-width: 100%;
+            height: auto;
+            width: auto\9; /* ie8 */
+        }
+        /* TYPOGRAPHY */
+        strong {
+            font-weight: bold;
+            display: block;
+        }
+        small {
+            font-size: 0.75rem;
+        }
+        .left {
+            float: left;
+        }
+        .right {
+            float: right;
+        }
+        .align-left {
+            text-align: left !important;
+        }
+        .align-right {
+            text-align: right;
+        }
+
+        /* LAYOUT */
+        .clearfix:after {
+            content:"\0020";
+            display:block;
+            height:0;
+            clear:both;
+            visibility:hidden;
+            overflow:hidden;
+        }
+        .page {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 5%;
+            min-height: 800px;
+            position: relative;
+        }
+        /* PAGE HEADER */
+        .page-header {
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #ddd;
+        }
+        .page-header .logo {
+            float: left;
+            max-width: 160px;
+        }
+        .page-header .contact {
+            float: right;
+            font-size: 0.85rem;
+            margin-top: 0.7rem;
+        }
+        .page-header .contact strong {
+            display: inline-block;
+        }
+        .page-header .contact span {
+            color: #999;
+            padding-right: 12px;
+        }
+        /* INVOICE HEADER */
+        .invoice-header {
+            padding: 2rem 0;
+            border-bottom: 2px solid #ddd;
+        }
+        .invoice-header .recipient {
+            float: left;
+        }
+        .invoice-header .dates {
+            float: right;
+            line-height: 1.05;
+            font-size: 0.85rem;
+        }
+        .invoice-header .dates .labels {
+            float: left;
+            width: 160px;
+            margin-bottom: 0.5rem;
+        }
+        .invoice-header .dates .values {
+            float: right;
+            text-align: right;
+        }
+        /* INVOICE NO */
+        .invoice-no {
+            padding: 4rem 0 2rem 0;
+            font-weight: bold;
+            line-height: 1;
+        }
+        .invoice-no strong {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        /* INVOICE SPEC */
+        .invoice-spec {
+            width: 100%;
+        }
+        .invoice-spec td {
+            padding: 0.5rem;
+            text-align: right;
+        }
+        .invoice-spec tr {
+            border-bottom: 1px solid #eee;
+        }
+        .invoice-spec thead {
+            background-color: #eee;
+        }
+        .invoice-spec tfoot {
+            font-weight: bold;
+            background-color: #fafafa;
+        }
+        .note {
+            margin: 1rem 0;
+        }
+        /* PAYMENT DETAILS */
+        .payment-details {
+            margin: 2rem 0;
+            border-top: 1px solid #ddd;
+            padding-top: 1rem;
+        }
+        .payment-details .row {
+            margin: 1rem 0;
+        }
+        /* PAGE HEADER */
+        .page-footer {
+            margin-bottom: 1rem;
+            position: fixed;
+            bottom: 0;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="{% static "admin/favicon.png" %}">
+    <!--[if lt IE 9]>
+        <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    </head>
+    <body>
+        <div class="page">
+            <header class="page-header clearfix">
+                <img src="{% static "admin/goodcode-logo-color.png" %}" alt="GoodCode" class="logo" >
+                <div class="contact">
+                    <strong>Dobar Kod d.o.o</strong> – Ulica Ive Robića 2, 10020 Zagreb, Croatia<br>
+                    <span>E: info@dobarkod.hr</span><span>T: +385-91-252-96-08</span><span>W: dobarkod.hr</span>
+                </div>
+            </header>
+            <section class="invoice-header clearfix">
+                <div class="recipient">
+                    <strong>{{ instance.client.name }}</strong>
+                    <small>{{ instance.client.address|linebreaks }}
+
+                    {% load i18n %}
+                    {% language 'en' %}
+                    {{instance.client.country.name }}
+                    {% endlanguage %}
+
+                    {% if instance.client.vat_id %}
+                        <br> VAT ID: {{ instance.client.vat_id }}
+                    {% endif %}
+                    </small>
+                </div>
+                <div class="dates">
+                    <div class="clearfix">
+                        <div class="labels">
+                            <strong>Date</strong>
+                            <small>Datum računa</small>
+                        </div>
+                        <div class="values">
+                            <strong> {{ instance.created|date:'d.m.Y' }}</strong>
+                            <small>{{ instance.created|date:'H:i' }}</small>
+                        </div>
+                    </div>
+                    <div class="clearfix">
+                        <div class="labels">
+                            <strong>Delivery date</strong>
+                            <small>Datum isporuke</small>
+                        </div>
+                        <div class="values">
+                            <strong> {{ instance.created|date:'d.m.Y' }}</strong>
+                            <small>{{ instance.created|date:'H:i' }}</small>
+                        </div>
+                    </div>
+                    <div class="clearfix">
+                        <div class="labels">
+                            <strong>Due</strong>
+                            <small>Dospijeće</small>
+                        </div>
+                        <div class="values">
+                            <strong> {{ instance.due_date|date:'d.m.Y' }} </strong>
+                            <small>{{ instance.due_date|date:'H:i' }}</small>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="invoice clearfix">
+                <h1 class="invoice-no">
+                    <strong>Invoice R1 # {{ instance }}</strong>
+                    Račun R1 br. {{ instance }}
+                </h1>
+                <table class="invoice-spec">
+                    <thead>
+                        <tr>
+                            <td class="align-left">
+                                <strong>#</strong>
+                                <small>Broj</small>
+                            </td>
+                            <td class="align-left">
+                                <strong>Description</strong>
+                                <small>Opis</small>
+                            </td>
+                            {% if instance.has_hourly %}
+                            <td>
+                                <strong>Hours</strong>
+                                <small>Sati</small>
+                            </td>
+                            <td>
+                                <strong>Rate</strong>
+                                <small>Satnica</small>
+                            </td>
+                            {% endif %}
+
+                            {% if instance.currency != "HRK" %}
+                            <td>
+                                <strong>Amount ({{ instance.currency }})</strong>
+                                <small>Iznos ({{ instance.currency }})</small>
+                            </td>
+                            {% endif %}
+                            <td>
+                                <strong>Amount (HRK)</strong>
+                                <small>Iznos (HRK)</small>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in instance_items %}
+                            <tr>
+                                <td class="align-left"> {{ forloop.counter }} </td>
+                                <td class="align-left">
+                                    <strong> {{ item.description }} </strong>
+                                    <small>{{ item.additional_info|linebreaks }}</small>
+                                </td>
+                            {% if instance.has_hourly %}
+                                <td> {{ item.hours|floatformat }} </td>
+                                <td> {{ item.rate|floatformat }}
+
+                                {% if item.is_hourly %}
+                                {{ instance.currency }} / hr</td>
+                                {% endif %}
+
+                            {% endif %}
+
+                            {% if instance.currency != "HRK" %}
+                            <td> {{ item.amount }} </td>
+                            {% endif %}
+                            <td> {{ item.amount_hrk }} </td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="{{ colspan }}">
+                                <strong>Before VAT:</strong>
+                                <small>Osnovica</small>
+                            </td>
+                            {% if instance.currency != "HRK" %}
+                            <td> {{ instance.subtotal }} </td>
+                            {% endif %}
+                            <td> {{ instance.subtotal_hrk }} </td>
+                        </tr>
+                        <tr>
+                            <td colspan="{{ colspan }}">
+                                <strong>VAT  {{ vat }} %</strong>
+                                <small>PDV</small>
+                            </td>
+                            {% if instance.currency != "HRK" %}
+                            <td> {{ instance.vat_amount }} </td>
+                            {% endif %}
+                            <td> {{ instance.vat_hrk }} </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="{{ colspan }}">
+                                <strong>Total</strong>
+                                <small>Ukupno</small>
+                            </td>
+                            {% if instance.currency != "HRK" %}
+                            <td> {{ instance.total }} </td>
+                            {% endif %}
+                            <td> {{ instance.total_hrk }} </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                {% if instance.currency != "HRK" %}
+                <div class="note left">
+                    <small><strong>Exchange rate: 1 {{ instance.currency }} = {{ instance.exchange_rate }} HRK</strong></small>
+                    <small>Srednji tečaj HNB na dan {{ instance.created|date:'d.m.Y' }}</small>
+                </div>
+                {% endif %}
+                <div class="note right align-right" style="padding-right: 0.5rem;">
+                    {% if instance.client.reverse_charge %}
+                    <small><strong>Note: this invoice is subject to VAT reverse charge</strong></small>
+                    <small>Napomena: prijenos porezne obveze temeljem čl. 17. st. 1. Zakona o PDV-u </small>
+                    {% endif %}
+                </div>
+            </section> <!-- // invoice -->
+            <section class="payment-details">
+                <div class="row right align-right">
+                    {% if instance.default_payment_method == 'Wire-transfer' %}
+                    <strong>Please use the following information for paying this invoice:</strong><br>
+                    <strong>
+                        HR18 2340 0091 1104 1933 6<br>
+                        PRIVREDNA BANKA ZAGREB D.D.<br>
+                        10000 Zagreb, Račkoga 6, Croatia<br>
+                        SWIFT CODE: PBZGHR2X
+                    </strong>
+                    {% endif %}
+                    {% if instance.default_payment_method == 'PayPal' %}
+                    <strong>Please use the following information for paying this invoice:</strong><br>
+                    Payable via PayPal Payment to:
+                    <strong>senko.rasic@dobarkod.hr</strong>
+                    {% endif %}
+
+                </div>
+                <div class="row clearfix">
+                    {% if instance.default_payment_method == 'Wire-transfer' %}
+                    <strong>Način plaćanja:</strong><br>uplata na žiro-račun
+                    <strong>IBAN HR1823400091110419336</strong>
+                    {% endif %}
+                    {% if instance.default_payment_method == 'PayPal' %}
+                    <strong>Način plaćanja:</strong><br>Uplata na PayPal račun:
+                    <strong>senko.rasic@dobarkod.hr </strong>
+                    {% endif %}
+                </div>
+                <div class="row align-right">
+                    <strong>Issued by:</strong>
+                    <small>Izdavatelj:</small><br><br>
+                    Senko Rašić
+                </div>
+            </section>
+            <footer class="page-footer">
+                <small><strong>Dobar Kod d.o.o za računalne i srodne djelatnosti</strong> IBAN: HR18 2340 0091 1104 1933 6 (PBZ) – OIB: 47027797459 – MB: 2608308 – VAT ID: HR 47027797459<br>
+                Tvrtka upisana kod Trgovačkog suda u Zagrebu – Temeljni kapital: 20,000kn uplaćen u cijelosti – Direktor: Senko Rašic<br>
+                Račun je izdan elektroničkim putem te je važeći bez potpisa i pečata.<br>
+                The invoice is produced electronically, and is valid without the signature and the seal.</small>
+            </footer>
+        </div>
+        <script type="text/javascript">
+            window.print();
+        </script>
+    </body>
+</html>
+
